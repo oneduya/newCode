@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <aop:aspectj-autoproxy/>
+    <!-- 让Spring管理Homework bean-->
+    <bean id="homework" class="com.AOC.Homework">
+        <property name="content" value="how to calc 3+2 ?"></property>
+    </bean>
+    <!-- 让Spring管理 Student bean   -->
+    <bean id="student" class="com.AOC.Student">
+        <property name="name" value="小明"></property>
+    </bean>
+
+    <!-- 切面定义-->
+    <bean id="checktime" class="com.AOC.CheckNowTime"></bean>
+    <!--<aop:config>
+        <aop:aspect ref="checktime">
+            <aop:pointcut id="dohomework" expression="execution(* *.doHomeWork(..))"/>
+            <aop:before pointcut-ref="dohomework" method="beforDoHomework"></aop:before>
+        </aop:aspect>
+    </aop:config>-->
+</beans>
