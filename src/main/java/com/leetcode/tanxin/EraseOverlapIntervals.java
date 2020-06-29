@@ -15,6 +15,7 @@ public class EraseOverlapIntervals {
         int p = 0;
         int q = 1;
         int count = 0;
+        //贪心法，先按区间开始排序
         Arrays.sort(intervals, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
@@ -22,15 +23,18 @@ public class EraseOverlapIntervals {
             }
         });
         while(q<intervals.length) {
+            //当区间恰好不相交则跳过
             if(intervals[p][1]<=intervals[q][0]) {
                 p = q;
                 q++;
             }
+            //当后面的右边界比前面的小在前面的区间内则删除前面的
             else if(intervals[p][1]>=intervals[q][1]) {
                 p = q;
                 q ++;
                 count++;
             }
+            //如果后面的和前面的相交而且区间右边界比前面的大则删除后面的
             else if(intervals[p][1]>intervals[q][0] && intervals[p][0]<=intervals[q][1]) {
                 count++;
                 q++;
@@ -40,7 +44,7 @@ public class EraseOverlapIntervals {
     }
 
     public static void main(String[] args) {
-        int[][] a = {{0,2},{1,3},{2,4},{3,5},{4,6}};
+        int[][] a = {{0,2},{3,10},{2,4},{3,5},{4,6}};
         EraseOverlapIntervals eraseOverlapIntervals = new EraseOverlapIntervals();
         eraseOverlapIntervals.eraseOverlapIntervals(a);
     }

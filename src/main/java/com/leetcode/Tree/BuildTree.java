@@ -36,6 +36,8 @@ public class BuildTree {
         TreeNode root = new TreeNode(pre[preRoot]);
         //如果是子节点得话inLeft==i==inRight
         root.left = build(preRoot+1,inLeft,i-1);
+        //i-inLeft + preRoot+1表示右子树的根节点在前序遍历中的位置，i-left表示左子树个数，
+        // 前序遍历中要从上一个根节点的位置往后数左子树节点个数个元素，才是右子树的根节点，+1操作很重要
         root.right = build(i-inLeft + preRoot+1,i+1,inRight);
         return root;
     }

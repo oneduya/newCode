@@ -28,7 +28,6 @@ public class SemaphoreTest {
                 }
             }
         });
-
         executorService.submit(new Runnable() {
             @Override
             public void run() {
@@ -40,7 +39,6 @@ public class SemaphoreTest {
                 }
             }
         });
-
         semaphore.acquire(2);
         System.out.println("all child thread over");
         executorService.shutdown();
