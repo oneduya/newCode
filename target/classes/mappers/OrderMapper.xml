@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.apache.ibatis.dddybtest.OrderMapper">
+    <resultMap id="OrderUserDetailResultMap" type="org.apache.ibatis.dddybtest.Order" autoMapping="true">
+        <id column="id" property="id"/>
+        <!--collection:定义子对象集合映射-->
+        <!--association:完成子对象的映射-->
+        <!--property:子对象在父对象中的属性名-->
+        <!--javaType:子对象的java类型-->
+        <!--autoMapping:完成子对象的自动映射，若开启驼峰，则按驼峰匹配-->
+        <association property="user" javaType="org.apache.ibatis.dddybtest.User" autoMapping="true">
+            <id column="user_id" property="id"/>
+        </association>
+        <collection property="detailList" javaType="List" ofType="org.apache.ibatis.dddybtest.OrderDetail" autoMapping="true">
+            <id column="id" property="id"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="OrderUserResultMap" type="org.apache.ibatis.dddybtest.Order" autoMapping="true">
+        <id column="id" property="id"/>
+        <!--association:完成子对象的映射-->
+        <!--property:子对象在父对象中的属性名-->
+        <!--javaType:子对象的java类型-->
+        <!--autoMapping:完成子对象的自动映射，若开启驼峰，则按驼峰匹配-->
+        <association property="user" javaType="org.apache.ibatis.dddybtest.User" autoMapping="true">
+            <id column="user_id" property="id"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="OrderUserDetailItemResultMap" type="org.apache.ibatis.dddybtest.Order" autoMapping="true">
+        <id column="id" property="id"/>
+        <association property="user" javaType="org.apache.ibatis.dddybtest.User" autoMapping="true">
+            <id column="user_id" property="id"/>
+        </association>
+        <collection property="detailList" javaType="List" ofType="org.apache.ibatis.dddybtest.OrderDetail" autoMapping="true">
+            <id column="detail_id" property="id"/>
+            <association property="item" javaType="org.apache.ibatis.dddybtest.Item" autoMapping="true">
+                <id column="item_id" property="id"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <resultMap id="LazyOrderUserResultMap" type="org.apache.ibatis.dddybtest.Order" autoMapping="true">
+        <id column="id" property="id"/>
+        <!--select:子查询的statement的id，column：子查询所需的条件-->
+        <association property="user" javaType="org.apache.ibatis.dddybtest.User" autoMapping="true" select="queryUserById" column="user_id"></association>
+    </resultMap>
+
+    <select id="queryOrderAndUserBuOrderNumberLazy" resultMap="LazyOrderUserResultMap">
+        select * from tb_order where order_number=#{number}
+    </select>
+
+    <select id="queryUserById" resultType="org.apache.ibatis.dddybtest.User">
+        select * from tb_user where id=#{id}
+    </select>
+
+    <select id="queryOrderUserByOrderNumber" resultType="org.apache.ibatis.dddybtest.OrderUser">
+        select * from tb_order o left join tb_user u on o.user_id=u.id where o.order_number = #{number}
+    </select>
+
+    <select id="queryOrderWithUserByOrderNumber" resultMap="OrderUserResultMap">
+        select * from tb_order o left join tb_user u on o.user_id=u.id where o.order_number = #{number}
+    </select>
+
+    <select id="queryOrderWithUserAndDetailByOrderNumber" resultMap="OrderUserDetailResultMap">
+        select * from tb_order o
+        left join tb_user u on o.user_id=u.id
+        left join tb_orderdetail od on o.id=od.order_id
+        where o.order_number = #{number}
+    </select>
+
+    <select id="queryOrderWithUserAndDetailItemByOrderNumber" resultMap="OrderUserDetailItemResultMap">
+        select * ,od.id as detail_id from tb_order o
+        left join tb_user u on o.user_id=u.id
+        left join tb_orderdetail od on o.id=od.order_id
+        left join tb_item i on od.item_id=i.id
+        where o.order_number = #{number}
+    </select>
+</mapper>

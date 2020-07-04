@@ -26,53 +26,46 @@ import java.util.function.Consumer;
  * @Version: V0.1
  */
 public class Test {
-	public int maxSubArray(int[] nums) {
-		int[] res = fenzhi(nums,0,nums.length-1);
-		return res[2];
+	public ListNode mergeKLists(ListNode[] lists) {
+		return fenzhi(lists,0,lists.length-1);
 	}
 
-	//定义int[0]表示 [l, r][l,r] 内以 l 为左端点的最大子段和,
-	// int[1]表示 [l, r][l,r] 内以 r 为右端点的最大子段和,
-	// int[2]表示 [l, r][l,r] 内的最大子段和,
-	// int[3]表示 [l, r][l,r] 的区间和
-	public int[] fenzhi(int[] nums, int left, int right) {
+	public ListNode fenzhi(ListNode[] lists, int left, int right) {
 		if(left==right) {
-			return new int[]{nums[left], nums[left], nums[left], nums[left]};
+			return lists[left];
 		}
-		int mid = (left+right)>>1;
-		int[] leftArray = fenzhi(nums,left,mid);
-		int[] rightArray = fenzhi(nums,mid+1,right);
-		int[] ans = new int[4];
-		ans[0] = Math.max(leftArray[0],leftArray[3]+rightArray[0]);
-		ans[1] = Math.max(rightArray[1],rightArray[3]+leftArray[1]);
-		ans[3] = leftArray[3] + rightArray[3];
-		ans[2] = Math.max(Math.max(leftArray[2],rightArray[2]),leftArray[1]+rightArray[0]);
-		return ans;
+		int mid = (left+right)/2;
+		//递归得到分治计算结果
+		ListNode l = fenzhi(lists,left,mid);
+		ListNode r = fenzhi(lists,mid+1,right);
+		ListNode head = new ListNode(0);
+		ListNode headTmp = head;
+		//开始合并
+		while(l!=null && r!=null) {
+			if (l.val<=r.val) {
+				head.next = l;
+				l = l.next;
+			}
+			else {
+				head.next = r;
+				r = r.next;
+			}
+			head = head.next;
+		}
+		//l没排完或者r没排完
+		if (l!=null) {
+			head.next = l;
+		}
+		if (r!=null) {
+			head.next = r;
+		}
+		return headTmp.next;
 	}
+
+
 
 	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
 		Test test = new Test();
-//		System.out.println(test.maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
-		final CountDownLatch countDownLatch = new CountDownLatch(21);
-		for (int i = 0; i < 20; i++) {
-			new Thread(() -> {// Lambda 表达式的运用
-				try {
-					Thread.sleep(1000);
-					countDownLatch.countDown();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} finally {
-					System.out.println(Thread.currentThread() + " has down!");
-				}
-
-			}).start();
-		}
-		countDownLatch.await();
-		System.out.println("finish");
-		CyclicBarrier
+		
 	}
-
-
 }
