@@ -1,4 +1,4 @@
-package com.page3;
+package com;
 
 public class PaiXu {
     public static void swap(int[]array, int i, int j){
