@@ -22,6 +22,7 @@ public class DynamicAgent {
         }
     }
     public static Object agent(Class interfaceClazz, Object proxy) {
+        //生成代理类
         return Proxy.newProxyInstance(interfaceClazz.getClassLoader(), new Class[]{interfaceClazz},
                 new MyHandler(proxy));
     }

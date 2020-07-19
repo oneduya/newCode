@@ -1,6 +1,9 @@
 package org.apache.ibatis.dddybtest;
 
-import java.io.Serializable;
+import sun.misc.Contended;
+
+import java.beans.Transient;
+import java.io.*;
 import java.util.Date;
 
 /**
@@ -10,7 +13,7 @@ import java.util.Date;
  * @Date: 2020/6/26 16:17
  * @Version: V0.1
  */
-public class User implements Serializable {
+public class User implements Externalizable {
 	private static final long serialVersionUID = 930043933147295183L;
 
 	private String id;
@@ -19,7 +22,7 @@ public class User implements Serializable {
 	private String name;
 	private Integer age;
 	private Integer sex;
-	private Date birthday;
+	private transient Date birthday;
 	private String created;
 	private String updated;
 
@@ -108,5 +111,17 @@ public class User implements Serializable {
 				", created='" + created + '\'' +
 				", updated='" + updated + '\'' +
 				'}';
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+		out.writeObject(name);
+		out.writeInt(age);
+	}
+
+	@Override
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		name = (String) in.readObject();
+		age = in.readInt();
 	}
 }

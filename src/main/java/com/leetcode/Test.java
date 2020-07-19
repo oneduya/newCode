@@ -1,70 +1,49 @@
 package com.leetcode;
 
-import com.Solution;
+
 import com.leetcode.Tree.TreeNode;
-import com.leetcode.list.ListNode;
-import com.oracle.jrockit.jfr.Producer;
-import com.sun.deploy.uitoolkit.impl.fx.FXPluginToolkit;
-import com.sun.org.apache.xerces.internal.xs.XSTerm;
-import javafx.util.Pair;
+import jdk.nashorn.internal.ir.CallNode;
 
-import javax.swing.text.StyledEditorKit;
-import javax.xml.stream.events.Characters;
-import java.awt.font.TextAttribute;
-import java.lang.ref.PhantomReference;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
-import java.util.concurrent.atomic.AtomicStampedReference;
-import java.util.concurrent.locks.*;
-import java.util.function.Consumer;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
 
-/**
- * @ClassName: Test
- * @Description: 你有一套活字字模 tiles，其中每个字模上都刻有一个字母 tiles[i]。返回你可以印出的非空字母序列的数目。
- * <p>
- * 注意：本题中，每个活字字模只能使用一次。
- * @Author: WAHWJ
- * @Date: 2020/4/25 10:54
- * @Version: V0.1
- */
 public class Test {
-	public int findLongestSon(int[] nums) {
-		//tails[i]表示i+1长度子序列的结尾数字是几，这样可以保证tails是递增数列
-		//我们更新tails的方式是从前到后遍历数组nums，
-		// 对于每个数字，找到tails中可以插入的位置并替换该位置上的数
-		//这样可以保证找到到当前数字，它的最长长度是多少
-		int[] tails = new int[nums.length];
-		int ans = 0;
-		for (int num : nums) {
-			int l = 0;
-			int r = ans;
-			while (l<r) {
-				int mid = (l+r)/2;
-				//如果当前mid+1长度的子序列最后一个数大于等于num，则向前寻找，或者就放到当前位置（等于）
-				if (tails[mid]>=num) {
-					r = mid;
-				}
-				//如果小于则向后寻找，直到找到比前边的数都大且小于等于后面的数的位置
-				else {
-					l = mid+1;
-				}
-			}
-			//替换当前位置的数字
-			tails[l] = num;
-			//如果可以放到ans位置，则更新ans
-			if(r==ans) {
-				ans++;
+
+	public String multiply(String num1, String num2) {
+		if (num1.equals("0") || num2.equals("0")) {
+			return "0";
+		}
+		char[] chars1 = num1.toCharArray();
+		char[] chars2 = num2.toCharArray();
+		//num1*num2最多num1.length + num2.length位
+		int[] result = new int[chars1.length + chars2.length];
+		//对于num1的第i位和num2的第j位，他们的乘积最多两位，个位在i+j+1,十位在i+j
+		for (int i = chars1.length - 1; i >= 0; i--) {
+			for (int j = chars2.length - 1; j >= 0; j--) {
+				int num = (chars1[i] - '0') * (chars2[j] - '0') + result[i + j + 1];
+				result[i + j + 1] = num % 10;
+				result[i + j] += num / 10;
 			}
 		}
-		return ans;
+		StringBuilder sb = new StringBuilder();
+		boolean flag = false;
+		for (int i = 0; i < result.length; i++) {
+			if (i == 0 && result[i] == 0) {//首位为0
+				continue;
+			}
+			sb.append(result[i]);
+		}
+		return sb.toString();
 	}
 
-
-
-	public static void main(String[] args) throws Exception {
+	// Driver code
+	public static void main(String args[]) {
 		Test test = new Test();
-		System.out.println(test.findLongestSon(new int[]{1,2,3,4,5,6,7,8}));
+		System.out.println(test.multiply("123", "456"));
+
 	}
 }
 

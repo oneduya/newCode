@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
 
 /**
  * @ClassName: SemaphoreTest
- * @Description: TODO
+ * @Description: 先release再acquire
  * @Author: WAHWJ
  * @Date: 2020/5/8 13:10
  * @Version: V0.1
