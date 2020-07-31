@@ -1,8 +1,7 @@
 package com.AOC;
 
-import com.leetcode.Tree.BFS;
-import com.leetcode.Tree.BuildTree;
-import com.leetcode.Tree.TreeNode;
+import com.leetcode.tree.BuildTree;
+import com.leetcode.tree.TreeNode;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

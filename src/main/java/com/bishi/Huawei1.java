@@ -1,4 +1,4 @@
-package com.huawei;
+package com.bishi;
 
 import java.util.HashMap;
 import java.util.Scanner;

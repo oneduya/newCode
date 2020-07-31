@@ -11,7 +11,7 @@ import redis.clients.jedis.Jedis;
  */
 public class PfTest {
 	public static void main(String[] args) {
-		Jedis jedis = new Jedis();
+		Jedis jedis = new Jedis("192.168.1.103",6379);
 		jedis.del("codehole");
 		for (int i=0; i<100000; i++) {
 			jedis.pfadd("codehole", "user"+i);

@@ -1,7 +1,6 @@
-package com.leetcode.Tree;
+package com.leetcode.tree;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Stack;
 
 /**
