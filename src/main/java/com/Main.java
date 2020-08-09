@@ -1,54 +1,62 @@
 package com;
 
-import com.AOC.Person;
-
-import java.lang.reflect.Array;
 import java.util.*;
-
-/**
- * @ClassName: Main
- * @Description:
- * @Author: WAHWJ
- * @Date: 2020/7/22 9:15
- * @Version: V0.1
- */
 
 public class Main {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int n = sc.nextInt();
-		int[] array = new int[n];
-		for (int i = 0; i < n; i++) {
-			array[i] = sc.nextInt();
-		}
-		long res = 0;
-		//o1[0]表示盘子里饼的个数，o1[1]表示盘子索引
-		PriorityQueue<Integer[]> queue = new PriorityQueue<>(new Comparator<Integer[]>() {
+		int m = sc.nextInt();
+		PriorityQueue<int[]> que = new PriorityQueue<>(new Comparator<int[]>() {
 			@Override
-			public int compare(Integer[] o1, Integer[] o2) {
-				if (o1[0]==o2[0]) {
-					return o2[1]-o1[1];
-				}
-				return o1[0]-o2[0];
+			public int compare(int[] o1, int[] o2) {
+				return o1[2]-o2[2];
 			}
 		});
-		int nowMin = array[0];
-		for (int i=0;i<n;i++) {
-			if (array[i]<=nowMin) {
-				queue.add(new Integer[]{array[i],i});
-				nowMin = array[i];
-			}
+		int[] val = new int[3];
+		for (int i = 0; i < m; i++) {
+			val = new int[3];
+			val[0] = sc.nextInt();
+			val[1] = sc.nextInt();
+			val[2] = sc.nextInt();
+			que.add(val);
 		}
-		int nowEat = n;
-		while (!queue.isEmpty()) {
-			Integer[] cur = queue.poll();
-			while (!queue.isEmpty() && cur[0]==queue.peek()[0]) {
-				cur = queue.poll();
+		int[] num = new int[n+1];
+		int[][] find = new int[m][3];
+		int res = Integer.MAX_VALUE;
+		boolean flag = true;
+		int start = 0;
+		for (int i=0; i<m; i++) {
+			find[i] = que.poll();
+			num[find[i][0]]++;
+			num[find[i][1]]++;
+			flag = true;
+			for (int j = 1; j < n + 1; j++) {
+				if (num[j]<1) {
+					flag = false;
+				}
+				if (!flag)break;
 			}
-			res += (nowEat-cur[1])*cur[0];
-			nowEat = cur[1];
+			if (flag) {
+				while (flag&&start<i) {
+					res = Math.min(res,find[i][2]-find[start][2]);
+					num[find[start][0]]--;
+					num[find[start][1]]--;
+					start++;
+					for (int j = 1; j < n + 1; j++) {
+						if (num[j]<1) flag=false;
+						if (!flag) break;
+					}
+				}
+			}else {
+				continue;
+			}
 		}
 		System.out.println(res);
+
 	}
+
+
 }
+

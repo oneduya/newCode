@@ -1,4 +1,4 @@
-package com.enumtest;
+package com.designPattern.enumtest;
 
 public enum PizzaStatus {
 	ORDERED,

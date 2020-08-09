@@ -1,8 +1,4 @@
-package com.erfenSeach;
-
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.PriorityQueue;
+package com.leetcode.erfenSeach;
 
 /**
  * @ClassName: Search

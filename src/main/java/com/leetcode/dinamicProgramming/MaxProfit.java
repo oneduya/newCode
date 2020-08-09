@@ -80,6 +80,28 @@ public class MaxProfit {
 		return dp[n-1][k][0];
 	}
 
+	/**
+	 * 给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；
+	 * 非负整数 fee 代表了交易股票的手续费用。可以无限次买
+	 *
+	 * @param prices
+	 * @param fee
+	 * @return {@link int}
+	 * @throws
+	 * @author WAHWJ
+	 * @date 2020/8/4 WAHWJ
+	 */
+	public int maxProfit5(int[] prices, int fee) {
+		int dp0 = 0;
+		int dp1 = Integer.MIN_VALUE;
+		for (int i = 0; i < prices.length; i++) {
+			int temp = dp0;
+			dp0 = Math.max(dp0,dp1+prices[i]);
+			dp1 = Math.max(dp1,temp-prices[i]-fee);
+		}
+		return dp0;
+	}
+
 	public static void main(String[] args) {
 		MaxProfit maxProfit = new MaxProfit();
 		System.out.println(maxProfit.maxProfit4(1, new int[]{1, 2}));

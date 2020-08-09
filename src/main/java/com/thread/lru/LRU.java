@@ -1,4 +1,4 @@
-package com.thread;
+package com.thread.lru;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
