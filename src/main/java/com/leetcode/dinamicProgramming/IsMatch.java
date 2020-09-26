@@ -12,32 +12,46 @@ package com.leetcode.dinamicProgramming;
  * @Version: V0.1
  */
 public class IsMatch {
-	/**
-	 * @Author WAHWJ
-	 * @Description //动态规划
-	 * @Date 9:42 2020/6/27
-	 * @Param [s, p]
-	 * @return boolean
-	 **/
-	public int maxArea(int[] height) {
-		int left = 0;
-		int right = height.length-1;
-		int max = 0;
-		while (left<right) {
-			if(height[left] >= height[right]) {
-				max = Math.max(max,height[right]*(right-left));
-				right--;
-			}
-			else {
-				max = Math.max(max,height[left]*(right-left));
-				left++;
+	public boolean isMatch(String s, String p) {
+		int slen = s.length();
+		int plen = p.length();
+		boolean[][] dp = new boolean[slen+1][plen+1];
+		dp[0][0] = true;
+		for (int i = 0; i <= slen; i++) {
+			for (int j = 1; j <= plen; j++) {
+				char pc = p.charAt(j-1);
+
+				if(!(pc=='*')) {
+					if(matches(s,p,i,j)) {
+						dp[i][j] = dp[i-1][j-1];
+					}
+				} else {
+					//当p[j]等于"*"时，分为两种情况
+					//一种是当p[j-1]==s[i]的时候，这时*可以用来做匹配也可以不用来做匹配
+					if(matches(s,p,i,j-1)) {
+						dp[i][j] = dp[i-1][j] || dp[i][j-2];
+					} else {
+						//一种是当p[j-1]！=s[i]的时候，这时*只能考虑不匹配的情况
+						dp[i][j] = dp[i][j-2];
+					}
+				}
 			}
 		}
-		return max;
+		return dp[slen][plen];
+	}
+
+	boolean matches(String s, String p, int i, int j) {
+		if(i==0) {
+			return false;
+		}
+		if (p.charAt(j - 1) == '.') {
+			return true;
+		}
+		return s.charAt(i - 1) == p.charAt(j - 1);
 	}
 
 	public static void main(String[] args) {
 		IsMatch isMatch = new IsMatch();
-		System.out.println(isMatch.maxArea(new int[] {1,8,6,2,5,4,8,3,7}));
+
 	}
 }

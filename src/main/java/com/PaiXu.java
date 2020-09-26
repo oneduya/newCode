@@ -1,6 +1,8 @@
 package com;
 
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class PaiXu {
     public static void swap(int[]array, int i, int j){
@@ -27,7 +29,7 @@ public class PaiXu {
     //冒泡排序
     public static int[] maopao(int[] array){
         for(int i=0;i<array.length-1;i++){
-            for(int j=i; j<array.length-1;j++){
+            for(int j=0; j<array.length-1-i;j++){
                 if(array[j]>array[j+1]){
                     int temp = array[j];
                     array[j] = array[j+1];
@@ -121,20 +123,20 @@ public class PaiXu {
         int hightmp = high;
         int pivot = array[lowtmp];
         while(lowtmp < hightmp){
-            while(lowtmp < hightmp && array[hightmp] >= pivot){
+            while(lowtmp < hightmp && array[hightmp] >= pivot) {
                 hightmp--;
             }
             array[lowtmp] = array[hightmp];
-            while(lowtmp<hightmp && array[lowtmp] <= pivot){
+            while(lowtmp<hightmp && array[lowtmp] <= pivot) {
                 lowtmp++;
             }
             array[hightmp] = array[lowtmp];
         }
         array[lowtmp] = pivot;
-        if(low<lowtmp){
+        if(low<lowtmp) {
             fastSort(array,low,lowtmp-1);
         }
-        if(high>lowtmp+1){
+        if(high>lowtmp) {
             fastSort(array,lowtmp+1,high);
         }
     }
@@ -172,6 +174,53 @@ public class PaiXu {
             }
         }
         return smallIndex;
+    }
+
+    /**
+     * 稳定快排XXX写不出
+     *
+     * @param array
+     * @param low
+     * @param high
+     * @throws
+     * @author WAHWJ
+     * @date 2020/8/14 WAHWJ
+     */
+    public static void fastSort3(int[] array, int low, int high){
+        if (low == high) {
+            return;
+        }
+        int[] tmp = new int[array.length];
+        //这个高低指针用于记录对原数组遍历的位置
+        int low1 = low,high1 = high;
+        //这个高低指针用于记录原数组变化的指针，因为要每次往数组里面放下一次的值
+        int low2 = low,high2 = high;
+        int low3 = low,high3 = high;
+        int pivot = array[low];
+        while (low1<high1) {
+            while (low1 < high1 && array[high1]>=pivot) {
+                array[high2--] = array[high1--];
+            }
+            while (low1 < high1 && array[low1]<pivot) {
+                array[low2++] = array[low1++];
+            }
+            if (low1 < high1) {
+                tmp[low3++] = array[low1++];
+                tmp[high3--] = array[high1--];
+            }
+        }
+        for (int i=high3+1; i<=high; i++) {
+            array[low2++] = tmp[i];
+        }
+        for (int i=low; i<low3; i++) {
+           array[low2++] = tmp[i];
+        }
+        if (low1>low) {
+            fastSort3(array, low, low1-1);
+        }
+        if (low1<high) {
+            fastSort3(array,low1+1,high);
+        }
     }
 
     /**
@@ -219,7 +268,7 @@ public class PaiXu {
      * @Param [array, low, high, k]
      * @return int
      **/
-    public static int fastSort3(int[] array, int low, int high, int k) {
+    public static int fastSortTopK(int[] array, int low, int high, int k) {
         if (k >= array.length) {
             return -1;
         }
@@ -244,15 +293,15 @@ public class PaiXu {
         if (k == lowtmp) {
             return array[k];
         } else if (k > lowtmp) {
-            return fastSort3(array, lowtmp + 1, high, k);
+            return fastSortTopK(array, lowtmp + 1, high, k);
         } else {
-            return fastSort3(array, low, lowtmp - 1, k);
+            return fastSortTopK(array, low, lowtmp - 1, k);
         }
     }
 
     public static void main(String[] args) {
-        int[] array = {4,3,9,1,6,7,5,6,10};
-        heapSort(array);
-        System.out.println(1);
+        int[] array = {34, 21, 53, 8, 78, 123, 21, 53, 34, 111};
+        maopao(array);
+        System.out.println(Arrays.toString(array));
     }
 }

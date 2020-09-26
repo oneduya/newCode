@@ -8,32 +8,68 @@ package com.leetcode.dinamicProgramming;
  * @Version: V0.1
  */
 public class Trap {
-	public int trap(int[] height) {
-		int sum = 0;
-		int left_max = 0;
-		int right_max = 0;
-		int left = 1;
-		int right = height.length-2;
-		while(left<=right) {
-            /*设一开始left-1大于right+1，则之后right会一直向左移动，
-            直到right+1大于left-1。在这段时间内right所遍历的所有点都是
-            左侧最高点maxleft大于右侧最高点maxright的，
-            所以只需要根据原则判断maxright与当前高度的关系就行。反之left右移，
-            所经过的点只要判断maxleft与当前高度的关系就行。*/
-			if(height[left-1] < height[right+1]) {
-				left_max = Math.max(height[left-1],left_max);
-				if(left_max > height[left]) {
-					sum += left_max-height[left];
-				}
+
+	/**
+	 * 备忘录解法
+	 *
+	 * @param height
+	 * @return {@link int}
+	 * @throws
+	 * @author WAHWJ
+	 * @date 2020/8/16 WAHWJ
+	 */
+	public int trap1(int[] height) {
+		int len = height.length;
+		int[] left = new int[len];
+		int[] right = new int[len];
+		left[0] = height[0];
+		right[len-1] = height[len-1];
+		for (int i = 1; i < len; i++) {
+			left[i] = Math.max(height[i],left[i-1]);
+		}
+		for (int i = len-2; i >= 0; i--) {
+			right[i] = Math.max(height[i],right[i+1]);
+		}
+		int count = 0;
+		for (int i=1; i<len; i++) {
+			count += Math.min(left[i],right[i])-height[i];
+		}
+		return count;
+	}
+
+	/**
+	 * 其实这个问题要这么思考，我们只在乎 min(l_max, r_max)。对于上图的情况，
+	 * 我们已经知道 l_max < r_max 了，至于这个 r_max 是不是右边最大的，不重要，
+	 * 重要的是 height[i] 能够装的水只和 l_max 有关。
+	 *
+	 * @param height
+	 * @return {@link int}
+	 * @throws
+	 * @author WAHWJ
+	 * @date 2020/8/16 WAHWJ
+	 */
+	public int trap2(int[] height) {
+		int len = height.length;
+		if (len==0) {
+			return 0;
+		}
+		int left = 0;
+		int right = len-1;
+		int lmax = height[0];
+		int rmax = height[len-1];
+		int count=0;
+		while (left <= right) {
+			lmax = Math.max(height[left],lmax);
+			rmax = Math.max(height[right],rmax);
+			if (lmax < rmax) {
+				count += lmax - height[left];
 				left++;
-			}else {
-				right_max = Math.max(height[right+1],right_max);
-				if(right_max > height[right]) {
-					sum += right_max - height[right];
-				}
+			}
+			else {
+				count +=rmax - height[right];
 				right--;
 			}
 		}
-		return sum;
+		return count;
 	}
 }
