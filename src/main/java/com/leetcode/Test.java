@@ -8,6 +8,7 @@ import jdk.nashorn.internal.ir.CallNode;
 import java.util.*;
 
 public class Test {
+
 	public ListNode reverseList (ListNode head) {
 		ListNode cur = head;
 		ListNode pre = null;
@@ -20,6 +21,7 @@ public class Test {
 		}
 		return pre;
 	}
+
 	public static void main(String[] args) {
 		int[] array = new int[]{1, 5, 6, 3, 4, 9, 7, 8, 2};
 		long a = 1000000000L;

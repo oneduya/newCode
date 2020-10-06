@@ -60,61 +60,62 @@ public class ReversePairs {
     }*/
 
     public static int reversePairs(int[] nums) {
-        int len=nums.length;
-        if(len<2){
+        int len = nums.length;
+        if (len < 2) {
             return 0;
         }
-        int[] temp=new int[len];//辅助数组
-        return merge(nums,0,len-1,temp);
+        int[] temp = new int[len];//辅助数组
+        return merge(nums, 0, len - 1, temp);
     }
 
-    public static int merge(int[] nums,int left,int right,int[] temp){
-        if(left>=right){
+    public static int merge(int[] nums, int left, int right, int[] temp) {
+        if (left >= right) {
             return 0;//只有一个元素
         }
 
-        int mid=left+(right-left)/2;
+        int mid = left + (right - left) / 2;
         //左右的逆序对
-        int leftPairs=merge(nums,left,mid,temp);
-        int rightPairs=merge(nums,mid+1,right,temp);
+        int leftPairs = merge(nums, left, mid, temp);
+        int rightPairs = merge(nums, mid + 1, right, temp);
 
         //跨域左右的
-        int cross=mergeAndCount(nums,left,mid,right,temp);
-        return leftPairs+rightPairs+cross;
+        int cross = mergeAndCount(nums, left, mid, right, temp);
+        return leftPairs + rightPairs + cross;
     }
 
-    public static int mergeAndCount(int[] nums,int left,int mid,int right,int[] temp){
-        for(int i=left;i<=right;i++){
-            temp[i]=nums[i];//把序列放入数组
+    public static int mergeAndCount(int[] nums, int left, int mid, int right, int[] temp) {
+        for (int i = left; i <= right; i++) {
+            temp[i] = nums[i];//把序列放入数组
         }
 
-        int i=left;
-        int j=mid+1;//右边的起始点
+        int i = left;
+        int j = mid + 1;//右边的起始点
 
-        int count=0;
+        int count = 0;
 
-        while(i<=mid && j<=right) {
-            if(((nums[i] >> 1) + (nums[i] & 1)) > nums[j]){
-                count += mid-i+1;
+        while (i <= mid && j <= right) {
+            if (((nums[i] >> 1) + (nums[i] & 1)) > nums[j]) {
+                count += mid - i + 1;
                 j++;
-            }else {
+            } else {
                 i++;
             }
         }
-        i=left;j=mid+1;
-        for(int k=left;k<=right;k++){
-            if(i==mid+1){
-                nums[k]=temp[j];
+        i = left;
+        j = mid + 1;
+        for (int k = left; k <= right; k++) {
+            if (i == mid + 1) {
+                nums[k] = temp[j];
                 j++;
-            }else if(j==right+1){
-                nums[k]=temp[i];
+            } else if (j == right + 1) {
+                nums[k] = temp[i];
                 i++;
-            }else if(temp[i]<=temp[j]){
-                nums[k]=temp[i];
+            } else if (temp[i] <= temp[j]) {
+                nums[k] = temp[i];
                 i++;
 
-            }else{//左边数组的元素比右边的大
-                nums[k]=temp[j];
+            } else {//左边数组的元素比右边的大
+                nums[k] = temp[j];
                 j++;
             }
         }
@@ -123,7 +124,7 @@ public class ReversePairs {
 
     public static void main(String[] args) {
         ReversePairs reversePairs = new ReversePairs();
-        int count = reversePairs.reversePairs(new int[]{2147483647,2147483647,-2147483647,-2147483647,-2147483647,2147483647});
+        int count = reversePairs.reversePairs(new int[]{2147483647, 2147483647, -2147483647, -2147483647, -2147483647, 2147483647});
         System.out.println(count);
     }
 }
